@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static Security.LogIn.security.ApplicationUserRole.*;
+
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -28,9 +30,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+              .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/","index","/css/*","/js/*")
-                .permitAll()
+                .antMatchers("/","index","/css/*","/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name()) //this is to insert that only student can penetrate the api
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -42,12 +45,26 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected UserDetailsService userDetailsService() {
         //user details help us retrieve user from the databases
         //the user Details is an interface
-              UserDetails jibolaPasuma = User.builder()
+              UserDetails jibolaPasumaUser = User.builder()
                 .username("Jibola Pasuma")
                 .password(passwordEncoder.encode("password"))
-                .roles("student")
+                .roles(STUDENT.name())
                       .build();
 
-              return new InMemoryUserDetailsManager(jibolaPasuma);
+              UserDetails lindaUser = User.builder()
+                      .username("linda")
+                      .password(passwordEncoder.encode("password123"))
+                      .roles(ADMIN.name())
+                      .build();
+
+        UserDetails tomUser = User.builder()
+                .username("tom")
+                .password(passwordEncoder.encode("password123"))
+                .roles(ADMINTRAINEE.name())
+                .build();
+
+              return new InMemoryUserDetailsManager(jibolaPasumaUser,lindaUser,tomUser);
     }
+
+
 }
