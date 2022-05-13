@@ -22,8 +22,8 @@ public class StudentManagementController {
         return STUDENTS;
     }
 
-    @PostMapping
-    public void registerNewStudent(Student student){
+    @PostMapping()
+    public void registerNewStudent(@RequestBody Student student){
         System.out.println("registerNewStudent");
         System.out.println(student);
     }

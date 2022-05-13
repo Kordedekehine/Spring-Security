@@ -3,6 +3,7 @@ package Security.LogIn.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static Security.LogIn.security.ApplicationUserPermission.COURSE_WRITE;
 import static Security.LogIn.security.ApplicationUserRole.*;
 
 @Configuration
@@ -34,6 +36,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name()) //this is to insert that only student can penetrate the api
+                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO DELETE
+                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO POST
+                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO UPDATE
+                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -48,19 +54,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
               UserDetails jibolaPasumaUser = User.builder()
                 .username("Jibola Pasuma")
                 .password(passwordEncoder.encode("password"))
-                .roles(STUDENT.name())
+         //       .roles(STUDENT.name()) //ROLE_STUDENT
+                      .authorities(STUDENT.getGrantedAuthorities())
                       .build();
 
               UserDetails lindaUser = User.builder()
                       .username("linda")
                       .password(passwordEncoder.encode("password123"))
-                      .roles(ADMIN.name())
-                      .build();
+               //       .roles(ADMIN.name()) //ROLE_ADMIN
+                      .authorities(ADMIN.getGrantedAuthorities())
+                              .build();
 
         UserDetails tomUser = User.builder()
                 .username("tom")
                 .password(passwordEncoder.encode("password123"))
-                .roles(ADMINTRAINEE.name())
+         //       .roles(ADMINTRAINEE.name()) //ROLE_ADMINTRAINEE
+                .authorities(ADMINTRAINEE.getGrantedAuthorities())
                 .build();
 
               return new InMemoryUserDetailsManager(jibolaPasumaUser,lindaUser,tomUser);
