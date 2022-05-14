@@ -14,9 +14,9 @@ import java.util.List;
 public class StudentController {
 
     private static final List<Student> STUDENTS = Arrays.asList(
-            new Student(1,"Kolade Ruth"),
-            new Student(2,"Ojo Olaosebikan"),
-            new Student(3,"Jibola Pasuma")
+            new Student(1,"Malik"),
+            new Student(2,"Ojo"),
+            new Student(3,"Jibola")
     );
 
     @GetMapping(path = "{studentId}")

@@ -19,11 +19,9 @@ import static Security.LogIn.security.ApplicationUserRole.*;
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
-//we extend here basically to do the basic authentication
 
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
+@Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,14 +30,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-              .csrf().disable()
+                .csrf().disable()//we are still coming back to this
                 .authorizeRequests()
-                .antMatchers("/","index","/css/*","/js/*").permitAll()
-                .antMatchers("/api/**").hasRole(STUDENT.name()) //this is to insert that only student can penetrate the api
-                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO DELETE
-                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO POST
-                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) //GIVE STUDENT IN ADMIN ROLE PERMISSION TO UPDATE
-                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+                .antMatchers("/","index","/css/*","/js*/").permitAll()
+                .antMatchers("/api/**").hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.name())//getPermission())
+                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.name())//getPermission())
+                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.name())//.getPermission())
+                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,31 +47,27 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        //user details help us retrieve user from the databases
-        //the user Details is an interface
-              UserDetails jibolaPasumaUser = User.builder()
-                .username("Jibola Pasuma")
+        UserDetails malik = User.builder()
+                .username("malik")
                 .password(passwordEncoder.encode("password"))
-         //       .roles(STUDENT.name()) //ROLE_STUDENT
-                      .authorities(STUDENT.getGrantedAuthorities())
-                      .build();
-
-              UserDetails lindaUser = User.builder()
-                      .username("linda")
-                      .password(passwordEncoder.encode("password123"))
-               //       .roles(ADMIN.name()) //ROLE_ADMIN
-                      .authorities(ADMIN.getGrantedAuthorities())
-                              .build();
-
-        UserDetails tomUser = User.builder()
-                .username("tom")
-                .password(passwordEncoder.encode("password123"))
-         //       .roles(ADMINTRAINEE.name()) //ROLE_ADMINTRAINEE
-                .authorities(ADMINTRAINEE.getGrantedAuthorities())
+                .roles(STUDENT.name())
+                //.authorities(STUDENT.getGrantedAuthorities())
                 .build();
 
-              return new InMemoryUserDetailsManager(jibolaPasumaUser,lindaUser,tomUser);
+        UserDetails ali = User.builder()
+                .username("ali")
+                .password(passwordEncoder.encode("password1"))
+                .roles(ADMIN.name())
+                //.authorities(ADMIN.getGrantedAuthorities())
+                .build();
+
+        UserDetails tom = User.builder()
+                .username("tom")
+                .password(passwordEncoder.encode("password12"))
+                .roles(ADMINTRAINEE.name())
+                //.authorities(ADMINTRAINEE.getGrantedAuthorities())
+                .build();
+
+        return new InMemoryUserDetailsManager(malik,ali,tom);
     }
-
-
 }
