@@ -15,9 +15,9 @@ public class TemplateController {
         return "login";
     }
 
-    @GetMapping("hello")
-    public String hello(){
-        return "Hello World";
+    @GetMapping("courses")
+    public String getCourses(){
+        return "courses";
     }
 
 }
