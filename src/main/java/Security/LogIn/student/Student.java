@@ -8,10 +8,12 @@ public class Student {
     private final String StudentName;
 
 
+
     public Student(Integer studentId, String studentName) {
         StudentId = studentId;
         StudentName = studentName;
     }
+
 
     public Integer getStudentId() {
         return StudentId;

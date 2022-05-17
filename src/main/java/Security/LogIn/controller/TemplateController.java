@@ -6,12 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class TemplateController {
 
     @GetMapping("login")
-    public String getLoginView(){
+    public String getLogin() {
         return "login";
     }
+
+    @GetMapping("hello")
+    public String hello(){
+        return "Hello World";
+    }
+
 }
