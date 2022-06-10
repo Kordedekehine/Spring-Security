@@ -1,6 +1,7 @@
 package Security.LogIn.model;
 
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,11 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(	name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
+@Table(	name = "students")//,
+//        uniqueConstraints = {
+//                @UniqueConstraint(columnNames = "username"),
+//                @UniqueConstraint(columnNames = "email")
+       // })
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Student {
 
         @Id
@@ -42,15 +44,16 @@ public class Student {
         private String email;
         @Column
         private String password;
-        @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-        @JoinColumn
+       // @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+        //@JoinColumn
+       @ManyToMany(fetch = FetchType.LAZY)
         private Set<Role> role = new HashSet<>();
 
         public Student() {
         }
 
         public Student(Long id, String lastName, String firstName, String username,
-                       String phoneNumber, String email, String password, Set<Role> role) {
+                       String phoneNumber, String email, String password) {
                 this.id = id;
                 this.lastName = lastName;
                 this.firstName = firstName;

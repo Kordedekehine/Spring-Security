@@ -1,4 +1,4 @@
-package com.bicycleManagement.payload;
+package Security.LogIn.payload;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

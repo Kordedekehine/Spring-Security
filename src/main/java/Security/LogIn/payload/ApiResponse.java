@@ -1,4 +1,4 @@
-package com.bicycleManagement.payload;
+package Security.LogIn.payload;
 
 public class ApiResponse {
     private Boolean success;

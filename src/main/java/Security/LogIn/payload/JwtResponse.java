@@ -1,16 +1,10 @@
-package com.bicycleManagement.payload;
-
-import com.bicycleManagement.model.Role;
-import com.bicycleManagement.model.RoleName;
+package Security.LogIn.payload;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class JwtResponse {
     //JwtResponse: { accessToken, tokenType, id, username, email, roles }
