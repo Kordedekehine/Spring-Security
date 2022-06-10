@@ -1,4 +1,7 @@
 package Security.LogIn.security;
+import Security.LogIn.security.jwt.AuthEntryPointJwt;
+import Security.LogIn.security.jwt.AuthToken;
+import Security.LogIn.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,8 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+    public AuthToken authenticationJwtTokenFilter() {
+        return new AuthToken();
     }
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
