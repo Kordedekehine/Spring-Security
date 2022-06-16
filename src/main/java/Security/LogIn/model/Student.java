@@ -33,16 +33,14 @@ public class Student {
         @NotNull
         private String firstName;
 
-        @Column
+
         private String username;
 
-        @Column
+
         private String phoneNumber;
-        @Column
-        @Max(50)
-        @Email
+
         private String email;
-        @Column
+
         private String password;
        // @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
         //@JoinColumn
